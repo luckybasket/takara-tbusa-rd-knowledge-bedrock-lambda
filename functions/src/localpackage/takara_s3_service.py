@@ -11,14 +11,18 @@ class TakaraS3Service:
     self.s3Client = boto3.client(service_name='s3', region_name=region, config=s3Config)
     
 
-  def get_presigned_url(self, bucketName, objectKey, expirationTime):
+  def get_presigned_url(self, bucketName, folderPath, objectKey, expirationTime):
     presignedURL = None
+    if folderPath:
+      objectPath = folderPath+'/'+objectKey
+    else:
+      objectPath = objectKey
     try:
       presignedURL = self.s3Client.generate_presigned_url(
         ClientMethod='get_object',  # Method to presign for (e.g., get_object, put_object)
         Params={
             'Bucket': bucketName,
-            'Key': objectKey
+            'Key': objectPath
         },
         ExpiresIn=expirationTime
       )
