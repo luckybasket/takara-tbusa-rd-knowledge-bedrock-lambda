@@ -105,10 +105,11 @@ def processAction(actionID, payload):
       takaraS3 = importlib.import_module("localpackage.takara_s3_service")
       bucketName = payload['bucket_name']
       citationKey = payload['citation_key']
+      folderPath = payload['folder_path']
       region = 'us-east-2'
       s3Service = takaraS3.TakaraS3Service(region)
       expirationTime = 3600
-      presignedURL = s3Service.get_presigned_url(bucketName, citationKey, expirationTime)
+      presignedURL = s3Service.get_presigned_url(bucketName, folderPath, citationKey, expirationTime)
       if presignedURL is not None:
         output['isSuccess'] = True
         output['presignedURL'] = presignedURL
